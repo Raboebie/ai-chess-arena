@@ -81,6 +81,23 @@ describe('GameManager', () => {
     expect(seen.map((e) => e.san)).toEqual(['e4', expect.any(String)]); // human + claude reply
   });
 
+  it('stop() halts the loop so no further moves are emitted', async () => {
+    const gm = new GameManager({
+      ...cvc,
+      makePlayer: () => firstMovePlayer('x'),
+      startPaused: true,
+    });
+    const seen: string[] = [];
+    gm.on('move', (e) => seen.push(e.san));
+    gm.start();
+    await gm.step(); // play exactly one ply
+    expect(seen.length).toBe(1);
+    gm.stop();
+    gm.play(); // would normally resume the loop
+    await new Promise((r) => setTimeout(r, 20));
+    expect(seen.length).toBe(1); // no further moves after stop()
+  });
+
   it('rejects an illegal human move', () => {
     const gm = new GameManager({
       white: { kind: 'human' },

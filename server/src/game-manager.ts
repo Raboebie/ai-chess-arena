@@ -55,6 +55,20 @@ export class GameManager extends EventEmitter {
     this.speedMs = ms;
   }
 
+  /** Permanently halt this game so its loop exits and it stops emitting moves. */
+  stop(): void {
+    this.finished = true;
+    // Release any pending pause/human waiters so the loop can observe `finished` and exit.
+    const w = this.resumeWaiters;
+    this.resumeWaiters = [];
+    w.forEach((fn) => fn());
+    if (this.humanResolver) {
+      const r = this.humanResolver;
+      this.humanResolver = null;
+      r(false);
+    }
+  }
+
   /** Advance exactly one ply while paused. */
   async step(): Promise<void> {
     if (this.finished) return;

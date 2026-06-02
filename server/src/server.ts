@@ -41,6 +41,7 @@ export async function buildServer(opts: BuildOpts = {}) {
   app.post<{ Body: NewGameRequest }>('/api/games', async (req, reply) => {
     const cfg = req.body;
     const make = opts.makePlayer ?? defaultMakePlayer;
+    if (game) game.stop(); // halt any previous game so it stops broadcasting moves
     game = new GameManager({
       white: cfg.white,
       black: cfg.black,
