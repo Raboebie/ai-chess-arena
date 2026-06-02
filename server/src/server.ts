@@ -97,8 +97,9 @@ export async function buildServer(opts: BuildOpts = {}) {
 // Entry point when run directly (via `tsx src/server.ts` or compiled `server.js`).
 const entry = process.argv[1] ?? '';
 if (entry.endsWith('server.ts') || entry.endsWith('server.js')) {
+  const port = Number(process.env.PORT ?? 3001);
   const app = await buildServer();
-  await app.listen({ port: 3001, host: '127.0.0.1' });
+  await app.listen({ port, host: '127.0.0.1' });
   // eslint-disable-next-line no-console
-  console.log('AI Chess Arena server on http://localhost:3001');
+  console.log(`AI Chess Arena server on http://localhost:${port}`);
 }
