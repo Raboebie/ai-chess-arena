@@ -11,8 +11,19 @@ describe('gameReducer', () => {
       fen: 'after-e4',
       fallback: false,
       comment: 'center',
+      timestamp: 1717322000000,
+      durationMs: 6200,
     });
-    expect(s.history).toEqual([{ san: 'e4', color: 'w', comment: 'center', fallback: false }]);
+    expect(s.history).toEqual([
+      {
+        san: 'e4',
+        color: 'w',
+        comment: 'center',
+        fallback: false,
+        timestamp: 1717322000000,
+        durationMs: 6200,
+      },
+    ]);
     expect(s.fen).toBe('after-e4');
   });
 

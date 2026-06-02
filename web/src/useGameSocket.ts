@@ -6,6 +6,8 @@ export interface HistoryEntry {
   color: Color;
   comment?: string;
   fallback: boolean;
+  timestamp: number;
+  durationMs: number;
 }
 
 export interface GameState {
@@ -34,7 +36,14 @@ export function gameReducer(state: GameState, ev: ServerEvent): GameState {
         fen: ev.fen,
         history: [
           ...state.history,
-          { san: ev.san, color: ev.color, comment: ev.comment, fallback: ev.fallback },
+          {
+            san: ev.san,
+            color: ev.color,
+            comment: ev.comment,
+            fallback: ev.fallback,
+            timestamp: ev.timestamp,
+            durationMs: ev.durationMs,
+          },
         ],
       };
     case 'gameover':

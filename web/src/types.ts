@@ -25,6 +25,8 @@ export interface MoveEvent {
   comment?: string;
   fallback: boolean;
   captured?: string;
+  timestamp: number;
+  durationMs: number;
 }
 
 export interface GameOverEvent {
