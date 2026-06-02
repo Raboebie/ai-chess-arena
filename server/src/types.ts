@@ -25,6 +25,8 @@ export interface MoveEvent {
   comment?: string;   // reasoning / persona banter
   fallback: boolean;  // true if a random legal move was used
   captured?: string;  // captured piece letter (lowercase), if any
+  timestamp: number;  // epoch ms when the move was emitted
+  durationMs: number; // how long the moving side took for this move
 }
 
 export interface GameOverEvent {

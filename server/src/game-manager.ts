@@ -28,6 +28,7 @@ export class GameManager extends EventEmitter {
   private finished = false;
   private resumeWaiters: Array<() => void> = [];
   private humanResolver: ((ok: boolean) => void) | null = null;
+  private turnStartedAt = 0;
 
   constructor(private opts: GameManagerOpts) {
     super();
@@ -108,6 +109,7 @@ export class GameManager extends EventEmitter {
 
   private async playOnePly(): Promise<void> {
     if (this.finished) return;
+    this.turnStartedAt = Date.now();
     const color = this.engine.turn();
     const player = this.players[color];
 
@@ -127,6 +129,7 @@ export class GameManager extends EventEmitter {
   }
 
   private emitMove(choice: PlayerChoice, color: Color, captured?: string): void {
+    const now = Date.now();
     const ev: MoveEvent = {
       type: 'move',
       ply: this.engine.history().length,
@@ -136,6 +139,8 @@ export class GameManager extends EventEmitter {
       comment: choice.comment,
       fallback: choice.fallback,
       captured,
+      timestamp: now,
+      durationMs: Math.max(0, now - this.turnStartedAt),
     };
     this.emit('move', ev);
   }

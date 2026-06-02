@@ -48,6 +48,23 @@ describe('GameManager', () => {
     expect(events[1].color).toBe('b');
   });
 
+  it('stamps each move with a timestamp and a non-negative duration', async () => {
+    const events: any[] = [];
+    const gm = new GameManager({ ...cvc, makePlayer: () => firstMovePlayer('x') });
+    gm.on('move', (e) => events.push(e));
+    await new Promise<void>((resolve) => {
+      gm.on('gameover', () => resolve());
+      gm.start();
+    });
+    expect(events.length).toBeGreaterThan(0);
+    for (const e of events) {
+      expect(typeof e.timestamp).toBe('number');
+      expect(e.timestamp).toBeGreaterThan(0);
+      expect(typeof e.durationMs).toBe('number');
+      expect(e.durationMs).toBeGreaterThanOrEqual(0);
+    }
+  });
+
   it('does not auto-advance while paused, and step() plays exactly one ply', async () => {
     const gm = new GameManager({
       ...cvc,
