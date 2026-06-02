@@ -1,18 +1,28 @@
-import { useState } from 'react';
 import type { ClientMessage } from '../types';
 
 interface Props {
   send: (m: ClientMessage) => void;
+  paused: boolean;
+  speedMs: number;
+  onPaused: (paused: boolean) => void;
+  onSpeed: (ms: number) => void;
   onNewGame: () => void;
   over: boolean;
   result?: string;
   reason?: string;
 }
 
-export function Controls({ send, onNewGame, over, result, reason }: Props) {
-  const [paused, setPaused] = useState(false);
-  const [speed, setSpeed] = useState(1500);
-
+export function Controls({
+  send,
+  paused,
+  speedMs,
+  onPaused,
+  onSpeed,
+  onNewGame,
+  over,
+  result,
+  reason,
+}: Props) {
   return (
     <div
       style={{
@@ -27,7 +37,7 @@ export function Controls({ send, onNewGame, over, result, reason }: Props) {
         <button
           onClick={() => {
             send({ type: 'pause' });
-            setPaused(true);
+            onPaused(true);
           }}
         >
           ⏸ Pause
@@ -36,7 +46,7 @@ export function Controls({ send, onNewGame, over, result, reason }: Props) {
           className="primary"
           onClick={() => {
             send({ type: 'play' });
-            setPaused(false);
+            onPaused(false);
           }}
         >
           ▶ Play
@@ -60,14 +70,14 @@ export function Controls({ send, onNewGame, over, result, reason }: Props) {
           min={0}
           max={4000}
           step={250}
-          value={speed}
+          value={speedMs}
           onChange={(e) => {
             const ms = Number(e.target.value);
-            setSpeed(ms);
+            onSpeed(ms);
             send({ type: 'speed', ms });
           }}
         />
-        <span style={{ color: 'var(--muted)', fontSize: 12 }}>{(speed / 1000).toFixed(2)}s</span>
+        <span style={{ color: 'var(--muted)', fontSize: 12 }}>{(speedMs / 1000).toFixed(2)}s</span>
       </div>
       {over && (
         <div className="title">

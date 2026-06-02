@@ -17,17 +17,23 @@ export function MoveList({ history }: { history: HistoryEntry[] }) {
           {rows.map((r) => (
             <tr key={r.n}>
               <td style={{ color: 'var(--muted)', width: 28 }}>{r.n}.</td>
-              <td>
+              <td title={r.white ? new Date(r.white.timestamp).toLocaleTimeString() : undefined}>
                 {r.white && (
                   <span style={{ color: r.white.fallback ? '#ffb4b4' : 'inherit' }}>
-                    {r.white.san}
+                    {r.white.san}{' '}
+                    <span style={{ color: 'var(--muted)', fontSize: 11 }}>
+                      {(r.white.durationMs / 1000).toFixed(1)}s
+                    </span>
                   </span>
                 )}
               </td>
-              <td>
+              <td title={r.black ? new Date(r.black.timestamp).toLocaleTimeString() : undefined}>
                 {r.black && (
                   <span style={{ color: r.black.fallback ? '#ffb4b4' : 'inherit' }}>
-                    {r.black.san}
+                    {r.black.san}{' '}
+                    <span style={{ color: 'var(--muted)', fontSize: 11 }}>
+                      {(r.black.durationMs / 1000).toFixed(1)}s
+                    </span>
                   </span>
                 )}
               </td>

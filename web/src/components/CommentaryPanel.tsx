@@ -24,6 +24,9 @@ export function CommentaryPanel({ history }: { history: HistoryEntry[] }) {
               key={i}
               style={{ background: 'var(--panel-2)', borderRadius: 8, padding: '6px 10px' }}
             >
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>
+                {new Date(h.timestamp).toLocaleTimeString()} · {(h.durationMs / 1000).toFixed(1)}s
+              </div>
               <span style={{ color: 'var(--accent)' }}>
                 {h.color === 'w' ? 'White' : 'Black'} {h.san}:
               </span>{' '}
